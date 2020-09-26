@@ -15,8 +15,8 @@ public class FogController : MonoBehaviour
     // Update is called once per frame
     void Update() {
         if (target) {
-            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z);
-            putToGround();;
+            transform.position = target.position + Vector3.up;
+            putToGround();
         }
     }
 
@@ -24,7 +24,7 @@ public class FogController : MonoBehaviour
         Ray r = new Ray(transform.position, Vector3.down);
         RaycastHit info;
         int layermask = LayerMask.GetMask("Terrain");
-        if (Physics.Raycast(r, out info, 2, layermask)) {
+        if (Physics.Raycast(r, out info, 3, layermask)) {
             transform.position = info.point;
         }
     }

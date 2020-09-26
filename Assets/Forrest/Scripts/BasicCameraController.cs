@@ -12,6 +12,9 @@ public class BasicCameraController : MonoBehaviour {
     private Vector2 cameraSensitivity = Vector2.one;
 
     private Vector3 camRotation = new Vector3(25, 0, 0);
+    private float cameraZoom = 0;
+    [SerializeField]
+    private Vector2 zoomClip = new Vector2(-2, 5);
 
     void LateUpdate() { 
         handleInput();
@@ -25,8 +28,11 @@ public class BasicCameraController : MonoBehaviour {
             camRotation += new Vector3(-Input.GetAxisRaw("Mouse Y") * cameraSensitivity.y, Input.GetAxisRaw("Mouse X") * cameraSensitivity.x, 0) * 180 * Time.deltaTime;
         } else {
             Cursor.lockState = CursorLockMode.None;
-            camRotation += Vector3.up * Input.GetAxis("Horizontal") * 180 * Time.deltaTime;
+            //camRotation += Vector3.up * Input.GetAxis("Horizontal") * 180 * Time.deltaTime;
         }
+
+        cameraZoom -= Input.GetAxis("Mouse ScrollWheel") * 10;
+        cameraZoom = Mathf.Clamp(cameraZoom, zoomClip.x, zoomClip.y);
 
         camRotation = new Vector3(Mathf.Clamp(camRotation.x, -20, 70), camRotation.y, camRotation.z);
     }
@@ -36,7 +42,7 @@ public class BasicCameraController : MonoBehaviour {
     }
 
     private Vector3 calculateTargetPosition() {
-        Vector3 targetPos = Vector3.back * targetDistance;
+        Vector3 targetPos = Vector3.back * (targetDistance + cameraZoom);
 
         Matrix4x4 rotation = Matrix4x4.Rotate(Quaternion.Euler(getTargetRotation()));
         targetPos = rotation * targetPos;

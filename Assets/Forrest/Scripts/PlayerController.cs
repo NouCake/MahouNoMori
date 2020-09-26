@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour {
 
     private void putToGround() {
         Vector3 ccOffset = Vector3.up * (charcon.height * 0.5f) - charcon.center;
-        Ray r = new Ray(transform.position + ccOffset, Vector3.down);
+        Ray r = new Ray(transform.position - ccOffset, Vector3.down);
         RaycastHit info;
         int layermask = LayerMask.GetMask("Terrain");
         if(Physics.Raycast(r, out info, 2, layermask)) {
