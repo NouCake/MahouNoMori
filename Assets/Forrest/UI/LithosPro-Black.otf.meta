@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: ef3f87279034180459824038455f3d73
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Lithos Pro
+  fontNames:
+  - Lithos Pro
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: e5f511e2721a24642b2c8ec0abbd3a4d, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -8,7 +8,7 @@ public class TargetProjectile : MonoBehaviour
     public GameObject hit;
     public GameObject flash;
     public GameObject[] Detached;
-    private Transform target;
+    private Targetable target;
     private Vector3 targetOffset;
 
     [Space]
@@ -18,28 +18,24 @@ public class TargetProjectile : MonoBehaviour
     public float sideAngle = 25;
     public float upAngle = 20;
 
-    void Start()
-    {
+    void Start() {
         FlashEffect();
         newRandom();
     }
 
-    void newRandom()
-    {
+    void newRandom() {
         randomUpAngle = Random.Range(0, upAngle);
         randomSideAngle = Random.Range(-sideAngle, sideAngle);
     }
 
     //Link from movement controller
     //TARGET POSITION + TARGET OFFSET
-    public void UpdateTarget(Transform targetPosition , Vector3 Offset)
-    {
-        target = targetPosition;
+    public void UpdateTarget(Targetable target , Vector3 Offset) {
+        this.target = target;
         targetOffset = Offset;
     }
 
-    void Update()
-    {
+    void Update() {
         if (target == null)
         {
             foreach (var detachedPrefab in Detached)
@@ -53,10 +49,10 @@ public class TargetProjectile : MonoBehaviour
             return;
         }
 
-        Vector3 forward = ((target.position + targetOffset) - transform.position);
+        Vector3 forward = ((target.GetTargetPoint() + targetOffset) - transform.position);
         Vector3 crossDirection = Vector3.Cross(forward, Vector3.up);
         Quaternion randomDeltaRotation = Quaternion.Euler(0, randomSideAngle, 0) * Quaternion.AngleAxis(randomUpAngle, crossDirection);
-        Vector3 direction = randomDeltaRotation * ((target.position + targetOffset) - transform.position);
+        Vector3 direction = randomDeltaRotation * ((target.GetTargetPoint() + targetOffset) - transform.position);
 
         float distanceThisFrame = Time.deltaTime * speed;
 
@@ -93,7 +89,7 @@ public class TargetProjectile : MonoBehaviour
     {
         if (hit != null)
         {
-            var hitInstance = Instantiate(hit, target.position + targetOffset, transform.rotation);
+            var hitInstance = Instantiate(hit, target.GetTargetPoint() + targetOffset, transform.rotation);
             var hitPs = hitInstance.GetComponent<ParticleSystem>();
             if (hitPs != null)
             {
@@ -113,5 +109,6 @@ public class TargetProjectile : MonoBehaviour
             }
         }
         Destroy(gameObject);
+        target.GetHitReceiver()?.Hit();
     }
 }

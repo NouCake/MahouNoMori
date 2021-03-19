@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoarController : MonoBehaviour {
+[RequireComponent(typeof(Targetable))]
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(CharacterController))]
+public class BoarController : MonoBehaviour, HitReceiver, StatInfo {
 
     private enum STATE {
         IDLE,
@@ -10,23 +13,32 @@ public class BoarController : MonoBehaviour {
         BATTLE
     }
 
+    private int health = 10;
+
     [SerializeField]
     private float moveSpeed = 2;
 
     private Animator animator;
     private CharacterController charcon;
+    private Targetable targetable;
 
-    [SerializeField]
-    private float timeSinceLastStateChange;
-    [SerializeField]
-    private STATE state = STATE.IDLE;
+    private UIHealthbar healthbar;
+
+    [SerializeField] private GameObject DeathParticles;
+
+    [SerializeField] private float timeSinceLastStateChange;
+    [SerializeField] private STATE state = STATE.IDLE;
     private List<StateBehaviour> states;
     private StateBehaviour currentBehaviour;
     private Vector3 posInLastFrame;
 
-    void Start() {
+    private void Awake() {
         charcon = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        targetable = GetComponent<Targetable>();
+    }
+
+    void Start() {
         states = new List<StateBehaviour>();
         states.Add(new IdleBehaviour(this));
         states.Add(new RandomWalkBehaviour(this));
@@ -40,7 +52,23 @@ public class BoarController : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        
+        if(health <= 0) {
+            AnimatorStateInfo info = animator.GetCurrentAnimatorStateInfo(0);
+            if (info.IsName("Death") && info.normalizedTime >= 1) {
+                Destroy(gameObject);
+
+                if (DeathParticles != null) {
+                    var hitInstance = Instantiate(DeathParticles, transform.position, transform.rotation);
+                    var hitPs = hitInstance.GetComponent<ParticleSystem>();
+                    if (hitPs != null) {
+                        Destroy(hitInstance, hitPs.main.duration);
+                    } else {
+                        var hitPsParts = hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>();
+                        Destroy(hitInstance, hitPsParts.main.duration);
+                    }
+                }
+            }
+        }
     }
 
     private void moveToTargetPosition(Vector3 target) {
@@ -72,6 +100,37 @@ public class BoarController : MonoBehaviour {
             if (sb.state == state) return sb;
         }
         return null;
+    }
+
+    public void Hit() {
+        setState(STATE.IDLE);
+        health--;
+        if(health <= 0) {
+            targetable.SetTargetable(false);
+            animator.Play("Death", 0, 0.0f);
+        } else {
+            animator.Play("hit", 0, 0.0f);
+        }
+
+        if (healthbar == null) healthbar = HUDController.Instance.CreateHealthbar(targetable);
+        healthbar.SetHealthPercent(GetHealth() / GetMaxHealth());
+    }
+
+
+    private void OnDestroy() {
+        if (healthbar != null) Destroy(healthbar.gameObject);
+    }
+
+    public int GetHealth() {
+        return health;
+    }
+
+    public int GetMaxHealth() {
+        return 10;
+    }
+
+    public int GetLevel() {
+        throw new System.NotImplementedException();
     }
 
     private class RandomWalkBehaviour : StateBehaviour {

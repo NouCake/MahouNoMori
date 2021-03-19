@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class PlayerMagicController : MonoBehaviour {
 
-    [SerializeField]
-    private GameObject projectile;
+    [SerializeField] private GameObject projectile;
+    [SerializeField] private GameObject bomb;
 
     private Animator animator;
     private Transform spellOffset;
@@ -19,30 +19,36 @@ public class PlayerMagicController : MonoBehaviour {
         spellOffset = f2.Find("J_Bip_R_LowerArm").Find("J_Bip_R_Hand");
     }
 
+    public bool isCasting() {
+        return armUpTime > 0;
+    }
+
     // Update is called once per frame
     void Update() {
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Input.GetMouseButtonDown(0)) {
-            animator.SetLayerWeight(1, 1);
-            armUpTime = 0.5f;
-            RaycastHit info;
-            int layermask = LayerMask.GetMask("Terrain");
-            if (Physics.Raycast(r, out info, 30, layermask)) {
+            Targetable target = TargetSelector.Target;
+            if(target != null) {
+                animator.SetLayerWeight(1, 1);
+                armUpTime = 0.5f;
                 GameObject p = Instantiate(projectile, spellOffset.position, transform.rotation);
-                GameObject target = new GameObject();
-                target.transform.position = info.point;
-                p.GetComponent<TargetProjectile>().UpdateTarget(target.transform, Vector3.zero);
+                p.GetComponent<TargetProjectile>().UpdateTarget(target, Vector3.zero);
             }
         }
+
+        if (Input.GetMouseButtonDown(1)) {
+            Targetable target = TargetSelector.Target;
+            if(target != null) {
+                GameObject buff = Instantiate(bomb, target.transform);
+                ParticleSystem buffPS = buff.GetComponent<ParticleSystem>();
+                Destroy(buff, buffPS.main.duration);
+            }
+
+        }
+
         armUpTime -= Time.deltaTime;
         if(armUpTime <= 0) {
             animator.SetLayerWeight(1, 0);
         }
-    }
-
-    private void OnDrawGizmos() {
-        Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Gizmos.DrawRay(r);
     }
 
 }

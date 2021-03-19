@@ -11,10 +11,12 @@ public class PlayerController : MonoBehaviour {
 
     private CharacterController charcon;
     private Animator animator;
+    private PlayerMagicController magicController;
     
     void Start() {
         charcon = GetComponent<CharacterController>();
         animator = GetComponentInChildren<Animator>();
+        magicController = GetComponent<PlayerMagicController>();
     }
 
     void Update() {
@@ -23,6 +25,10 @@ public class PlayerController : MonoBehaviour {
     }
 
     private float getMoveSpeed() {
+        if (magicController.isCasting()) {
+            animator.SetBool("Running", false);
+            return moveSpeed * 0.75f;
+        }
         if (Input.GetKey(KeyCode.LeftShift)) {
             animator.SetBool("Running", true);
             return moveSpeed * sprintModificator;
