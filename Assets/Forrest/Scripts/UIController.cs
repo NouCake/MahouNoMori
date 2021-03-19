@@ -20,6 +20,7 @@ public class UIController : MonoBehaviour {
     private void Update() {
         PlayerHealthbar.SetName(info.GetHealth()+"");
         PlayerHealthbar.SetHealthPercent(info.GetHealth() / (float)info.GetMaxHealth());
+        PlayerManabar.SetHealthPercent(info.GetMana() / (float)info.GetMaxMana());
     }
 
 

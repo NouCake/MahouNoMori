@@ -9,6 +9,7 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     protected CharacterController characterController;
 
     protected EntityAnimationController animationController;
+    protected EntityAttackController attackController;
     protected EntityMovementController movementController;
 
     public GameObject DeathParticles;
@@ -22,8 +23,10 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
 
     //StatInfo
     [SerializeField] protected int Level;
-    [SerializeField] protected int Health;
-    private int MaxHealth;
+    [SerializeField] protected float Health;
+    [SerializeField] protected float Mana;
+    private float MaxHealth;
+    private float MaxMana;
 
     private float deathTimer;
     private float stunTimer;
@@ -39,10 +42,12 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
         targetable = GetComponent<Targetable>();
         animationController = GetComponent<EntityAnimationController>();
         movementController = GetComponent<EntityMovementController>();
+        attackController = GetComponent<EntityAttackController>();
     }
 
     protected virtual void Start() {
         MaxHealth = Health;
+        MaxMana = (int)Mana;
         if (ShowHealthbar) {
             createHealthbar();
         }
@@ -71,6 +76,10 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     }
 
     virtual protected void OnHitAnimation() {
+        if (attackController != null) 
+            if(attackController.IsAttacking())
+                if(!attackController.TryTumble())
+                    return;
         lastHit = Time.time;
         animationController?.PlayHit();
     }
@@ -78,6 +87,10 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     virtual protected void OnDeath() {
         PlayDeathParticles();
         Destroy(gameObject);
+    }
+
+    public void AddMana(float mana) {
+        this.Mana += mana;
     }
 
     //Getter
@@ -89,12 +102,20 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
         return Level;
     }
 
-    public int GetHealth() {
+    public float GetHealth() {
         return Health;
     }
 
-    public int GetMaxHealth() {
+    public float GetMaxHealth() {
         return MaxHealth;
+    }
+
+    public float GetMana() {
+        return Mana;
+    }
+
+    public float GetMaxMana() {
+        return MaxMana;
     }
 
     //private methods
@@ -142,5 +163,4 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     private void OnDestroy() {
         if (healthbar != null) Destroy(healthbar.gameObject);
     }
-
 }

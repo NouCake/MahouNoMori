@@ -5,7 +5,10 @@ using UnityEngine;
 public interface StatInfo {
 
     int GetLevel();
-    int GetHealth();
-    int GetMaxHealth();
+    float GetHealth();
+    float GetMaxHealth();
+
+    float GetMana();
+    float GetMaxMana();
 
 }

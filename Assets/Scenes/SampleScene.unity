@@ -227,6 +227,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: FantasyRock
       objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 4bfd6b7b05322ea4f88db4eec250ed50,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bfd6b7b05322ea4f88db4eec250ed50, type: 3}
 --- !u!1001 &72371515
@@ -1054,7 +1059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1766320492}
   targetDistance: 5
-  lookAtOffset: {x: 0, y: 0, z: 0}
+  lookAtOffset: {x: 0, y: 0.5, z: 0}
   cameraSensitivity: {x: 1, y: 1}
   zoomClip: {x: -2, y: 5}
 --- !u!1 &971665392
@@ -1287,6 +1292,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7febcad34a869744888d8d6650dc005d, type: 3}
+--- !u!1 &1190600039 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 4bfd6b7b05322ea4f88db4eec250ed50,
+    type: 3}
+  m_PrefabInstance: {fileID: 9999262}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1190600043
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190600039}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.8385468, y: 1.307706, z: 6.0000014}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!224 &1300238829 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3424632949115418672, guid: 79f4efa2c6ac4cb4ba52f50615e2adff,
@@ -1478,6 +1502,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7437545}
     m_Modifications:
+    - target: {fileID: 3424632947896313580, guid: 79f4efa2c6ac4cb4ba52f50615e2adff,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3424632947896313580, guid: 79f4efa2c6ac4cb4ba52f50615e2adff,
+        type: 3}
+      propertyPath: m_FillMethod
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3424632947896313580, guid: 79f4efa2c6ac4cb4ba52f50615e2adff,
+        type: 3}
+      propertyPath: m_FillOrigin
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3424632949115418672, guid: 79f4efa2c6ac4cb4ba52f50615e2adff,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1664,6 +1703,8 @@ GameObject:
   - component: {fileID: 1766320494}
   - component: {fileID: 1766320496}
   - component: {fileID: 1766320493}
+  - component: {fileID: 1766320495}
+  - component: {fileID: 1766320498}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1685,7 +1726,7 @@ Transform:
   - {fileID: 1719654430}
   - {fileID: 2022681001}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: -198.702, z: 0}
 --- !u!114 &1766320493
 MonoBehaviour:
@@ -1699,9 +1740,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f59aaa807f22744815f242cb0810c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 10
-  MovementSpeedModifier: 1
-  stopTime: 0
+  MovementSpeed: 3
+  MovementSpeedModifier: 1.75
+  targetPosition: {x: 0, y: 0, z: 0}
+  moveTimer: 0
+  moving: 0
+  godPls: 0
 --- !u!143 &1766320494
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1720,6 +1764,21 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: -0.16, z: 0}
+--- !u!114 &1766320495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766320491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0b507163717c24797fac1b146f3c5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HitRecoverTime: 1
+  DeathAnimationTime: 0.967
+  HitAnimationTime: 1.767
 --- !u!114 &1766320496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1753,6 +1812,25 @@ MonoBehaviour:
   HitImmuneTime: 2
   Level: 10
   Health: 50
+  Mana: 10
+  SprintSpeedModifier: 2
+  BaseAttack: {fileID: 11400000, guid: 8c68c07090ea4f84ba211334c4be9d45, type: 2}
+  TargetSelector: {fileID: 2025571732}
+--- !u!114 &1766320498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766320491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c684a314f416048a140025640726d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackTimer: 0
+  charging: 0
+  hitting: 0
 --- !u!1001 &1832666092
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7061,11 +7139,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 516169847, guid: 7febcad34a869744888d8d6650dc005d, type: 3}
-      propertyPath: baseAttack
-      value: 
-      objectReference: {fileID: 11400000, guid: 3921b814b0e02b745ba657d1c211cbfc,
-        type: 2}
+    - target: {fileID: 1953235805226317466, guid: 7febcad34a869744888d8d6650dc005d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5082931289362955827, guid: 7febcad34a869744888d8d6650dc005d,
         type: 3}
       propertyPath: m_Name
@@ -7074,7 +7152,7 @@ PrefabInstance:
     - target: {fileID: 8129396223290674208, guid: 7febcad34a869744888d8d6650dc005d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.83
+      value: 2.64
       objectReference: {fileID: 0}
     - target: {fileID: 8129396223290674208, guid: 7febcad34a869744888d8d6650dc005d,
         type: 3}
@@ -7084,7 +7162,7 @@ PrefabInstance:
     - target: {fileID: 8129396223290674208, guid: 7febcad34a869744888d8d6650dc005d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 10.18
+      value: 9.26
       objectReference: {fileID: 0}
     - target: {fileID: 8129396223290674208, guid: 7febcad34a869744888d8d6650dc005d,
         type: 3}
@@ -7183,7 +7261,7 @@ PrefabInstance:
     - target: {fileID: 4092816051090088222, guid: 176bb1795d979ee46af55849032da3dc,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4092816051090088222, guid: 176bb1795d979ee46af55849032da3dc,
         type: 3}

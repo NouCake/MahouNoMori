@@ -2,13 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EntityController))]
 public class EntityAttackController : MonoBehaviour {
+
+    private EntityController controller;
 
     private Targetable target;
 
     private AttackInfo currentAttack;
-    private float attackTimer;
+    [SerializeField] private float attackTimer;
     private bool hasAttacked;
+
+
+    public bool charging;
+    public bool hitting;
+
+    private void Awake() {
+        controller = GetComponent<EntityController>();
+    }
 
     private void Update() {
         if(attackTimer > 0) {
@@ -18,11 +29,20 @@ public class EntityAttackController : MonoBehaviour {
                 OnAttack();
             }
         }
+
+        charging = isCharging();
+        hitting = isHitting();
     }
 
     private void OnAttack() {
-        target.GetHitReceiver().Hit();
-        spawnParticles();
+        if(currentAttack.AttackType == "Melee") {
+            target.GetHitReceiver().Hit();
+            spawnParticles();
+        } else if(currentAttack.AttackType == "Ranged") {
+            ProjectileAttackInfo info = (ProjectileAttackInfo)currentAttack;
+            GameObject p = Instantiate(info.Projectile, transform.position, transform.rotation);
+            p.GetComponent<TargetProjectile>().UpdateTarget(target, Vector3.zero);
+        }
     }
 
     private void spawnParticles() {
@@ -34,6 +54,9 @@ public class EntityAttackController : MonoBehaviour {
     }
 
     public void StartAttack(Targetable target, AttackInfo attack) {
+        if (controller.GetMana() < attack.ManaCost) return;
+        controller.AddMana(-attack.ManaCost);
+
         SetTarget(target);
         currentAttack = attack;
         attackTimer = currentAttack.AttackTime;
@@ -49,7 +72,7 @@ public class EntityAttackController : MonoBehaviour {
     }
 
     private bool isCharging() {
-        return IsAttacking() && attackTimer < currentAttack.AttackTime - currentAttack.AttackChargeTime;
+        return IsAttacking() && attackTimer > currentAttack.AttackTime - currentAttack.AttackChargeTime;
     }
 
     private bool isHitting() {

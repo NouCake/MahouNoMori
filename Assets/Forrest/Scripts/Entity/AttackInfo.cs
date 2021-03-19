@@ -11,6 +11,8 @@ public class AttackInfo : ScriptableObject {
     public float AttackHitTime; //Time until the attack hits target
     public float AttackChargeTime; //Time attack can be canceld
 
-    public string AttackType;
+    public float ManaCost;
+
+    public string AttackType = "Melee";
 
 }

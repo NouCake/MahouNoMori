@@ -5,10 +5,28 @@ using UnityEngine;
 public class PlayerEntityController : EntityController {
 
     [SerializeField] private float SprintSpeedModifier = 2;
+    [SerializeField] private AttackInfo BaseAttack;
+    [SerializeField] private TargetSelector TargetSelector;
 
     override protected void Update() {
         base.Update();
 
+        if(Mana < GetMaxMana()) {
+            Mana += Time.deltaTime;
+        }
+
+        updateAttacking();
+        updateMovement();
+    }
+
+    private void updateAttacking() {
+        if (!attackController.IsAttacking() && Input.GetMouseButtonDown(0)) {
+            Targetable target = TargetSelector.Target;
+            if (target != null) attackController.StartAttack(target, BaseAttack);
+        }
+    }
+
+    private void updateMovement() {
         movementController.MovementSpeedModifier = calculateSpeedModifier();
         animationController.SetRunning(movementController.MovementSpeedModifier > 1);
         Vector2 input = getInputVector();
@@ -19,7 +37,6 @@ public class PlayerEntityController : EntityController {
             movementController.MoveIntoDirection(moveDirection);
             transform.rotation = Quaternion.LookRotation(moveDirection);
         }
-
     }
 
 
@@ -39,10 +56,9 @@ public class PlayerEntityController : EntityController {
 
 
     private float calculateSpeedModifier() {
-        /*if (magicController.isCasting()) {
-            animator.SetBool("Running", false);
-            return moveSpeed * 0.75f;
-        }*/
+        if (attackController.IsAttacking()) {
+            return 0.25f;
+        }
         if (Input.GetKey(KeyCode.LeftShift)) {
             //animator.SetBool("Running", true);
             return SprintSpeedModifier;

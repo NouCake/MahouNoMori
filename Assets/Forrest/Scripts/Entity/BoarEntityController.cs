@@ -52,7 +52,6 @@ public class BoarEntityController : EntityController {
     }
 
     protected override void OnHitAnimation() {
-        if (attackController.IsAttacking() && !attackController.TryTumble()) return;
         base.OnHitAnimation();
         Stun(animationController.HitAnimationTime);
     }
