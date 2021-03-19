@@ -16,7 +16,6 @@ public class EntityAnimationController : MonoBehaviour {
     [SerializeField] private float HitRecoverTime = 1.0f;
     [SerializeField] public float DeathAnimationTime = 0.967f;
     [SerializeField] public float HitAnimationTime = 1.767f;
-    [SerializeField] public float AttackAnimationTime = 1.200f;
 
     private void Awake() {
         animator = GetComponent<Animator>();

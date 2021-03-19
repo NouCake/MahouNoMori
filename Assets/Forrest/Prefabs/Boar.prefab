@@ -616,6 +616,7 @@ GameObject:
   - component: {fileID: 516169849}
   - component: {fileID: 516169853}
   - component: {fileID: 1409054167}
+  - component: {fileID: 3124080266213752731}
   m_Layer: 0
   m_Name: Boar
   m_TagString: Boar
@@ -707,14 +708,11 @@ MonoBehaviour:
   DeathParticles: {fileID: 1298029560938040, guid: d74e73c0044f5cd43a6f1f506f0df790,
     type: 3}
   ShowHealthbar: 1
+  HitImmuneTime: 2
   Level: 3
-  Health: 10
+  Health: 100
   state: 
   idleTimer: 0
-  target: {fileID: 0}
-  AttackParticles: {fileID: 1408840603016568, guid: 04c37cc0cab73994280830cd0738ac85,
-    type: 3}
-  AttackParticleTime: 0.4
 --- !u!114 &516169849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,6 +781,20 @@ MonoBehaviour:
   CheckInterval: 1
   InitialBufferSize: 20
   DynamicallyIncreaseBufferSize: 1
+--- !u!114 &3124080266213752731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5082931289362955827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7c684a314f416048a140025640726d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AttackHitParticles: {fileID: 1408840603016568, guid: 04c37cc0cab73994280830cd0738ac85,
+    type: 3}
 --- !u!1 &5467352298148290102
 GameObject:
   m_ObjectHideFlags: 0

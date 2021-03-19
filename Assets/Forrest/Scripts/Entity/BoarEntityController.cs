@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SensorToolkit;
 
+[RequireComponent(typeof(EntityAttackController))]
 [RequireComponent(typeof(EntityMovementController))]
 [RequireComponent(typeof(RangeSensor))]
 public class BoarEntityController : EntityController {
@@ -10,18 +11,17 @@ public class BoarEntityController : EntityController {
     [SerializeField] private string state;
     [SerializeField] private float idleTimer;
 
-
-    [SerializeField] private Targetable target;
-    private float attackTimer;
-    [SerializeField] private GameObject AttackParticles;
-    [SerializeField] private float AttackParticleTime = 0.4f;
-
     private RangeSensor sensor;
+    private EntityAttackController attackController;
 
+    private Targetable target;
+
+    [SerializeField] private AttackInfo baseAttack;
 
     protected override void Awake() {
         base.Awake();
-        movementController = GetComponent<EntityMovementController>();
+
+        attackController = GetComponent<EntityAttackController>();
         sensor = GetComponent<RangeSensor>();
     }
 
@@ -52,10 +52,9 @@ public class BoarEntityController : EntityController {
     }
 
     protected override void OnHitAnimation() {
-        if (attackTimer > animationController.AttackAnimationTime - AttackParticleTime) return;
+        if (attackController.IsAttacking() && !attackController.TryTumble()) return;
         base.OnHitAnimation();
         Stun(animationController.HitAnimationTime);
-        attackTimer = 0;
     }
 
     private void updateAttacking() {
@@ -70,28 +69,15 @@ public class BoarEntityController : EntityController {
 
         animationController.SetMoving(movementController.IsMoving());
         animationController.SetRunning(movementController.IsMoving());
-        if (distToTarget > 3f && attackTimer <= 0) {
-
+        if (distToTarget > 3f && !attackController.IsAttacking()) {
             Vector3 targetPoint = target.GetTargetPoint() - (target.GetTargetPoint() - targetable.GetTargetPoint()).normalized * 1.5f;
             movementController.MoveToTarget(targetPoint);
-
             return;
         }
 
-        if (attackTimer > 0) {
-
-            if (attackTimer > AttackParticleTime && attackTimer - Time.deltaTime < AttackParticleTime) {
-                GameObject go = Instantiate(AttackParticles, target.GetTargetPoint(), target.transform.rotation);
-                ParticleSystem goPS = go.GetComponent<ParticleSystem>();
-                Destroy(go, goPS.main.duration);
-                target.GetHitReceiver()?.Hit();
-            }
-            attackTimer -= Time.deltaTime;
-
-        } else {
+        if (!attackController.IsAttacking()) {
             animationController.PlayAttack();
-            attackTimer = animationController.AttackAnimationTime;
-            movementController.StopMovement(attackTimer);
+            attackController.StartAttack(target, baseAttack);
         }
 
     }
@@ -114,7 +100,6 @@ public class BoarEntityController : EntityController {
             this.target = nearest;
             state = "Attacking";
             movementController.StopMovement();
-            attackTimer = 0;
         }
     }
 

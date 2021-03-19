@@ -29,6 +29,12 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     private float stunTimer;
 
 
+    public void Stun(float time) {
+        if (stunTimer > time) Debug.Log("Stuntime was shortend!" + gameObject);
+        stunTimer = time;
+    }
+
+    //Virtual
     protected virtual void Awake() {
         targetable = GetComponent<Targetable>();
         animationController = GetComponent<EntityAnimationController>();
@@ -40,11 +46,6 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
         if (ShowHealthbar) {
             createHealthbar();
         }
-    }
-
-    public void Stun(float time) {
-        if (stunTimer > time) Debug.Log("Stuntime was shortend!" + gameObject);
-        stunTimer = time;
     }
 
     virtual public void Hit() {
@@ -97,7 +98,6 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
     }
 
     //private methods
-
     private void updateStunTimer() {
         if(stunTimer > 0) {
             stunTimer -= Time.deltaTime;
