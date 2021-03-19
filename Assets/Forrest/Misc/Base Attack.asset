@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e4f1d7190f530f4fbe6ef98d4dfbf38, type: 3}
   m_Name: Base Attack
   m_EditorClassIdentifier: 
-  AttackHitParticles: {fileID: 0}
-  AttackTime: 0
-  AttackHitTime: 0
-  AttackChargeTime: 0
-  AttackType: 
+  AttackHitParticles: {fileID: 1408840603016568, guid: 04c37cc0cab73994280830cd0738ac85,
+    type: 3}
+  AttackTime: 1.2
+  AttackHitTime: 0.8
+  AttackChargeTime: 0.4
+  AttackType: Melee

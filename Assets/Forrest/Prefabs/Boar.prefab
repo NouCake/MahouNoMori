@@ -655,7 +655,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.96
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.5
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1, z: 0.45}
@@ -713,6 +713,7 @@ MonoBehaviour:
   Health: 100
   state: 
   idleTimer: 0
+  baseAttack: {fileID: 11400000, guid: 3921b814b0e02b745ba657d1c211cbfc, type: 2}
 --- !u!114 &516169849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -728,7 +729,6 @@ MonoBehaviour:
   HitRecoverTime: 0.5
   DeathAnimationTime: 1.767
   HitAnimationTime: 0.967
-  AttackAnimationTime: 1.2
 --- !u!114 &516169853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -743,7 +743,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MovementSpeed: 2
   MovementSpeedModifier: 1
-  stopTime: 0
+  targetPosition: {x: 0, y: 0, z: 0}
+  moveTimer: 0
+  moving: 0
+  godPls: 0
 --- !u!114 &1409054167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -793,8 +796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7c684a314f416048a140025640726d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackHitParticles: {fileID: 1408840603016568, guid: 04c37cc0cab73994280830cd0738ac85,
-    type: 3}
 --- !u!1 &5467352298148290102
 GameObject:
   m_ObjectHideFlags: 0

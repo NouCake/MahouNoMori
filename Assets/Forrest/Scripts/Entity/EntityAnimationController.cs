@@ -19,6 +19,7 @@ public class EntityAnimationController : MonoBehaviour {
 
     private void Awake() {
         animator = GetComponent<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>(true);
     }
 
     public void PlayDeath() {
@@ -45,7 +46,7 @@ public class EntityAnimationController : MonoBehaviour {
     }
 
     public void SetRunning(bool running) {
-        if (this.running != running) animator.SetBool(animatorRunningId, moving);
+        if (this.running != running) animator.SetBool(animatorRunningId, running);
         this.running = running;
 
     }

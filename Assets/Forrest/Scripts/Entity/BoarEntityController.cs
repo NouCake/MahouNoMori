@@ -63,20 +63,21 @@ public class BoarEntityController : EntityController {
             state = "Roaming";
             target = null;
             movementController.MovementSpeedModifier = 1;
+            animationController.SetRunning(false);
             return;
         }
         movementController.MovementSpeedModifier = 3;
 
-        animationController.SetMoving(movementController.IsMoving());
-        animationController.SetRunning(movementController.IsMoving());
         if (distToTarget > 3f && !attackController.IsAttacking()) {
-            Vector3 targetPoint = target.GetTargetPoint() - (target.GetTargetPoint() - targetable.GetTargetPoint()).normalized * 1.5f;
-            movementController.MoveToTarget(targetPoint);
+            Vector3 targetDir = target.transform.position - transform.position;
+            animationController.SetRunning(true);
+            movementController.MoveIntoDirection(targetDir);
             return;
         }
 
         if (!attackController.IsAttacking()) {
             animationController.PlayAttack();
+            movementController.StopMovement();
             attackController.StartAttack(target, baseAttack);
         }
 
@@ -106,7 +107,6 @@ public class BoarEntityController : EntityController {
 
     private void updateRoaming() {
         if (Health <= 0) return;
-        animationController.SetMoving(movementController.IsMoving());
 
         if (idleTimer > 0) {
             idleTimer -= Time.deltaTime;
@@ -122,7 +122,7 @@ public class BoarEntityController : EntityController {
 
             Vector3 targetPos = Matrix4x4.Rotate(Quaternion.AngleAxis(Random.Range(-60, 60), Vector3.up)) * new Vector3(transform.forward.x, 0, transform.forward.z);
             targetPos *= Random.Range(1, 3);
-            movementController.MoveToTarget(transform.position + targetPos);
+            movementController.MoveToTarget(transform.position + targetPos, true);
         }
     }
 
