@@ -5,8 +5,19 @@ using UnityEngine;
 public class PlayerEntityController : EntityController {
 
     [SerializeField] private float SprintSpeedModifier = 2;
-    [SerializeField] private AttackInfo BaseAttack;
     [SerializeField] private TargetSelector TargetSelector;
+
+    [SerializeField] private AttackInfo[] Attacks;
+
+    private AttackInfo selectedAttack;
+
+    protected override void Start() {
+        base.Start();
+        UIController.Instance.SetSkillArtwork(1, Attacks[0].AttackArtwork);
+        UIController.Instance.SetSkillArtwork(2, Attacks[1].AttackArtwork);
+        UIController.Instance.SetSkillArtwork(3, Attacks[2].AttackArtwork);
+        SetAttack(0);
+    }
 
     override protected void Update() {
         base.Update();
@@ -15,14 +26,38 @@ public class PlayerEntityController : EntityController {
             Mana += Time.deltaTime;
         }
 
+        updateInput();
         updateAttacking();
         updateMovement();
     }
 
+    private void updateInput() {
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            SetAttack(0);
+        } else if (Input.GetKeyDown(KeyCode.Alpha2)) {
+            SetAttack(1);
+        } else if (Input.GetKeyDown(KeyCode.Alpha3)) {
+            SetAttack(2);
+        }
+    }
+
+    private void SetAttack(int AttackSlot) {
+        if (Attacks[AttackSlot] != null) {
+            selectedAttack = Attacks[AttackSlot];
+            TargetSelector.SetProjectionSprite(Attacks[AttackSlot].AttackType == "Area");
+        }
+        UIController.Instance.SetActiveSlot(AttackSlot+1);
+    }
+
     private void updateAttacking() {
         if (!attackController.IsAttacking() && Input.GetMouseButtonDown(0)) {
-            Targetable target = TargetSelector.Target;
-            if (target != null) attackController.StartAttack(target, BaseAttack);
+            if(selectedAttack.AttackType == "Area") {
+                attackController.StartAttack(TargetSelector.transform.position, selectedAttack);
+            } else {
+                Targetable target = TargetSelector.Target;
+                if (target != null) attackController.StartAttack(target, selectedAttack);
+            }
         }
     }
 

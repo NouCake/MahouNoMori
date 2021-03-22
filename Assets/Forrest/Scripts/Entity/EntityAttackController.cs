@@ -8,6 +8,7 @@ public class EntityAttackController : MonoBehaviour {
     private EntityController controller;
 
     private Targetable target;
+    private Vector3 targetPos;
 
     private AttackInfo currentAttack;
     [SerializeField] private float attackTimer;
@@ -35,22 +36,13 @@ public class EntityAttackController : MonoBehaviour {
     }
 
     private void OnAttack() {
-        if(currentAttack.AttackType == "Melee") {
-            target.GetHitReceiver().Hit();
-            spawnParticles();
-        } else if(currentAttack.AttackType == "Ranged") {
-            ProjectileAttackInfo info = (ProjectileAttackInfo)currentAttack;
-            GameObject p = Instantiate(info.Projectile, transform.position, transform.rotation);
-            p.GetComponent<TargetProjectile>().UpdateTarget(target, Vector3.zero);
-        }
-    }
+        HitInfo info;
+        if (target == null)
+            info = new HitInfo(controller, targetPos);
+        else
+            info = new HitInfo(controller, target);
 
-    private void spawnParticles() {
-        if(currentAttack.AttackHitParticles != null) {
-            GameObject go = Instantiate(currentAttack.AttackHitParticles, target.GetTargetPoint(), transform.rotation);
-            ParticleSystem goPS = go.GetComponent<ParticleSystem>();
-            Destroy(go, goPS.main.duration);
-        }
+        Instantiate(currentAttack.AttackController).Initialize(info);
     }
 
     public void StartAttack(Targetable target, AttackInfo attack) {
@@ -58,10 +50,24 @@ public class EntityAttackController : MonoBehaviour {
         controller.AddMana(-attack.ManaCost);
 
         SetTarget(target);
+        targetPos = Vector3.zero;
         currentAttack = attack;
         attackTimer = currentAttack.AttackTime;
         hasAttacked = false;
     }
+
+    public void StartAttack(Vector3 target, AttackInfo attack) {
+        if (controller.GetMana() < attack.ManaCost) return;
+        controller.AddMana(-attack.ManaCost);
+
+        this.target = null;
+        this.targetPos = target;
+        currentAttack = attack;
+        attackTimer = currentAttack.AttackTime;
+        hasAttacked = false;
+    }
+
+
 
     public bool TryTumble() {
         if (isCharging()) {

@@ -8,8 +8,10 @@ public class TargetProjectile : MonoBehaviour
     public GameObject hit;
     public GameObject flash;
     public GameObject[] Detached;
-    private Targetable target;
     private Vector3 targetOffset;
+
+    private EntityController source;
+    private Targetable target;
 
     [Space]
     [Header("PROJECTILE PATH")]
@@ -30,7 +32,8 @@ public class TargetProjectile : MonoBehaviour
 
     //Link from movement controller
     //TARGET POSITION + TARGET OFFSET
-    public void UpdateTarget(Targetable target , Vector3 Offset) {
+    public void UpdateTarget(EntityController source, Targetable target , Vector3 Offset) {
+        this.source = source;
         this.target = target;
         targetOffset = Offset;
     }
@@ -109,6 +112,6 @@ public class TargetProjectile : MonoBehaviour
             }
         }
         Destroy(gameObject);
-        target.GetHitReceiver()?.Hit();
+        target.GetHitReceiver()?.Hit(new HitInfo(source, target));
     }
 }

@@ -53,7 +53,7 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
         }
     }
 
-    virtual public void Hit() {
+    virtual public void Hit(HitInfo info) {
         Health--;
         if (ShowHealthbar) {
             if (healthbar == null) createHealthbar();

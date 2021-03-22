@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 3e4f1d7190f530f4fbe6ef98d4dfbf38
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - AttackHitParticles: {instanceID: 0}
+  - AttackArtwork: {fileID: 21300000, guid: 565947d8ea766904cb3a1fade2390d0f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

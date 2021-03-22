@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface HitReceiver {
 
-    void Hit();
+    void Hit(HitInfo info);
 
 }

@@ -12,7 +12,6 @@ public class BoarEntityController : EntityController {
     [SerializeField] private float idleTimer;
 
     private RangeSensor sensor;
-    private EntityAttackController attackController;
 
     private Targetable target;
 
@@ -21,7 +20,6 @@ public class BoarEntityController : EntityController {
     protected override void Awake() {
         base.Awake();
 
-        attackController = GetComponent<EntityAttackController>();
         sensor = GetComponent<RangeSensor>();
     }
 
@@ -46,14 +44,17 @@ public class BoarEntityController : EntityController {
         }
     }
 
-    public override void Hit() {
-        base.Hit();
-
+    public override void Hit(HitInfo info) {
+        base.Hit(info);
+        if(state == "Roaming") {
+            movementController.MoveToTarget(new Vector3(info.GetSource().transform.position.x, 0, info.GetSource().transform.position.z), true);
+            idleTimer = 0;
+        }
     }
 
     protected override void OnHitAnimation() {
         base.OnHitAnimation();
-        Stun(animationController.HitAnimationTime);
+        if(state != "Roaming") Stun(animationController.HitAnimationTime);
     }
 
     private void updateAttacking() {

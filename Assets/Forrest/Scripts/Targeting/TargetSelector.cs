@@ -9,24 +9,45 @@ public class TargetSelector : MonoBehaviour {
 
     private Targetable lastTarget;
 
+    [SerializeField] private int layermask;
+    [SerializeField] private Projector projector;
+
+    public void SetProjectionSprite(bool sprite) {
+        if (!sprite) {
+            projector.gameObject.SetActive(false);
+            return;
+        }
+
+        projector.gameObject.SetActive(true);
+        //projector.material.SetTexture("Cookie", sprite.texture);
+    }
+
     public static Targetable Target {
         get => getTarget();
     }
     private static Targetable getTarget() {
         _instance.sensor.Pulse();
-        Targetable target = _instance.sensor.GetNearestByComponent<Targetable>();
+        List<Targetable> targets = _instance.sensor.GetDetectedByComponent<Targetable>();
 
-        if (target == null) return null;
-        if (target.tag == "Player") return null;
-        if (Vector3.Distance(target.transform.position, _instance.transform.position) > _instance.sensor.SensorRange) return null;
-        if (!target.IsCurrentlyTargetable()) return null;
-        return target;
+
+        Targetable closest = null;
+        foreach(Targetable target in targets) {
+            if (target == null) continue;
+            if (target.tag == "Player") continue;
+            //if (Vector3.Distance(target.transform.position, _instance.transform.position) > _instance.sensor.SensorRange) return null;
+            if (!target.IsCurrentlyTargetable()) continue;
+            if (closest != null && Vector3.Distance(_instance.transform.position, target.GetTargetPoint()) > Vector3.Distance(_instance.transform.position, closest.GetTargetPoint())) continue;
+            closest = target;
+        }
+
+        return closest;
     }
     private static TargetSelector _instance;
 
     void Awake() {
         _instance = this;
         sensor = GetComponent<RangeSensor>();
+        layermask = LayerMask.GetMask("Default") | LayerMask.GetMask("Terrain"); 
     }
 
     private void moveSelector(Vector3 newPos) {
@@ -59,10 +80,13 @@ public class TargetSelector : MonoBehaviour {
     void Update() {
         Ray r = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit info;
-        int layermask = LayerMask.GetMask("Default") | LayerMask.GetMask("Terrain");
         if (Physics.Raycast(r, out info, 1000, layermask)) {
             moveSelector(info.point);
         }
+    }
+
+    public void SetLayerMask(int layermask) {
+        this.layermask = layermask;
     }
 
 }

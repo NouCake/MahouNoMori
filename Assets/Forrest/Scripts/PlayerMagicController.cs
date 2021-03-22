@@ -7,8 +7,14 @@ public class PlayerMagicController : MonoBehaviour {
     [SerializeField] private GameObject projectile;
     [SerializeField] private GameObject bomb;
 
+    private PlayerEntityController controller;
+
     private Animator animator;
     private Transform spellOffset;
+
+    private void Awake() {
+        controller = GetComponent<PlayerEntityController>();
+    }
 
     float armUpTime;
     void Start() {
@@ -25,13 +31,14 @@ public class PlayerMagicController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+
         if (Input.GetMouseButtonDown(0)) {
             Targetable target = TargetSelector.Target;
             if(target != null) {
                 animator.SetLayerWeight(1, 1);
                 armUpTime = 0.5f;
                 GameObject p = Instantiate(projectile, spellOffset.position, transform.rotation);
-                p.GetComponent<TargetProjectile>().UpdateTarget(target, Vector3.zero);
+                p.GetComponent<TargetProjectile>().UpdateTarget(controller, target, Vector3.zero);
             }
         }
 
