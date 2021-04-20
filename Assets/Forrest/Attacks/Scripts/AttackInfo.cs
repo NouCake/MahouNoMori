@@ -11,6 +11,7 @@ public class AttackInfo : ScriptableObject {
     public AttackController AttackController;
     public float ManaCost;
     [Space(10)]
+    public float AttackRange;
     public float AttackTime; //Time for the full attack
     public float AttackHitTime; //Time until the attack hits target
     public float AttackChargeTime; //Time attack can be canceld

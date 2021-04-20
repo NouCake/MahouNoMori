@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Targetable))]
 public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
 
-    protected Targetable targetable;
-    protected CharacterController characterController;
+    public Targetable targetable;
+    public CharacterController characterController;
 
     protected EntityAnimationController animationController;
     protected EntityAttackController attackController;
@@ -43,6 +43,7 @@ public class EntityController : MonoBehaviour, StatInfo, HitReceiver {
         animationController = GetComponent<EntityAnimationController>();
         movementController = GetComponent<EntityMovementController>();
         attackController = GetComponent<EntityAttackController>();
+        characterController = GetComponent<CharacterController>();
     }
 
     protected virtual void Start() {

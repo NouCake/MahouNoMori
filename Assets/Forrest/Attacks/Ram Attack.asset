@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e4f1d7190f530f4fbe6ef98d4dfbf38, type: 3}
-  m_Name: AreaAttack
+  m_Name: Ram Attack
   m_EditorClassIdentifier: 
-  AttackArtwork: {fileID: 21300000, guid: 565947d8ea766904cb3a1fade2390d0f, type: 3}
-  AttackType: Area
-  AttackController: {fileID: -7901233662571867222, guid: 811ecf80f7eeb5944a87028adf307da2,
+  AttackArtwork: {fileID: 21300000, guid: a54d9c217e5528247b5288987c74803a, type: 3}
+  AttackType: Move
+  AttackController: {fileID: 2882552719377293472, guid: ed200b6c7ebe8404e92b53781b61dc39,
     type: 3}
   ManaCost: 0
-  AttackTime: 0.3
-  AttackHitTime: 0.2
+  AttackRange: 5
+  AttackTime: 0.2
+  AttackHitTime: 0.1
   AttackChargeTime: 0

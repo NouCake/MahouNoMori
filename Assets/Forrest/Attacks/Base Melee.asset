@@ -17,6 +17,7 @@ MonoBehaviour:
   AttackController: {fileID: 5458524693080467578, guid: d896f75798bb2b947a93e7dddabc6f42,
     type: 3}
   ManaCost: 0
+  AttackRange: 2
   AttackTime: 1.2
   AttackHitTime: 0.8
   AttackChargeTime: 0.4

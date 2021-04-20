@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e4f1d7190f530f4fbe6ef98d4dfbf38, type: 3}
-  m_Name: Projectile Attack
+  m_Name: Area Attack
   m_EditorClassIdentifier: 
-  AttackArtwork: {fileID: 21300000, guid: 316803f78dbd4804f9d95ca799a74025, type: 3}
-  AttackType: Melee
-  AttackController: {fileID: 3310100997841803663, guid: e22e2adb055b2e64ea1b3623eea62277,
+  AttackArtwork: {fileID: 21300000, guid: dadfdd04f9fffcd4cbcbd0e40c64da88, type: 3}
+  AttackType: Area
+  AttackController: {fileID: -7901233662571867222, guid: 811ecf80f7eeb5944a87028adf307da2,
     type: 3}
-  ManaCost: 1
-  AttackRange: 10
+  ManaCost: 0
+  AttackRange: 3
   AttackTime: 0.3
   AttackHitTime: 0.2
   AttackChargeTime: 0
